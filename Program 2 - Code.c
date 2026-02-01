@@ -59,36 +59,41 @@ void postfixConv(char infix[], char postfix[]) {
     for (i = 0; infix[i] != '\0'; i++) {
         c = infix[i];
 
+        // If operand, add to postfix
         if (isalnum(c)) {
             postfix[k++] = c;
-        } else if (c == '(') {
+        }
+
+        // If '(', push to stack
+        else if (c == '(') {
             push(c);
-        } else if (c == ')') {
-            while (peek() != -1 && peek() != '(')
+        }
+
+        // If ')', pop until '('
+        else if (c == ')') {
+            while (peek() != '(') {
                 postfix[k++] = pop();
-            if (peek() == '(')
-                pop();
-            else
-                printf("Mismatched parentheses.\n");
-        } else {
-            while (top != -1 && ((precede(peek()) > precede(c)) ||
-                   (precede(peek()) == precede(c) && assoc(c) == 0))) {
+            }
+            pop(); // remove '('
+        }
+
+        // If operator
+        else {
+            while (top != -1 &&
+                  (precedence(peek()) > precedence(c) ||
+                  (precedence(peek()) == precedence(c) && associativity(c) == 0))) {
                 postfix[k++] = pop();
             }
             push(c);
         }
     }
 
-
+    // Pop remaining operators
     while (top != -1) {
-        if (peek() == '(' || peek() == ')') {
-            printf("Mismatched parentheses.\n");
-            return;
-        }
         postfix[k++] = pop();
     }
 
-    postfix[k] = '\0';
+    postfix[k] = '\0'; // end string
 }
 
 int main() {
@@ -102,3 +107,4 @@ int main() {
 
     return 0;
 }
+
