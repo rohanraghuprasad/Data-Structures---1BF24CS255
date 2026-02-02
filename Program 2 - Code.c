@@ -81,7 +81,7 @@ void postfixConv(char infix[], char postfix[]) {
         else {
             while (top != -1 &&
                   (precedence(peek()) > precedence(c) ||
-                  (precedence(peek()) == precedence(c) && associativity(c) == 0))) {
+                  (precedence(peek()) == precedence(c) && assoc(c) == 0))) {
                 postfix[k++] = pop();
             }
             push(c);
@@ -107,4 +107,5 @@ int main() {
 
     return 0;
 }
+
 
